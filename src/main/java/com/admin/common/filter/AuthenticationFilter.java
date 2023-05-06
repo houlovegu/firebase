@@ -50,7 +50,7 @@ public class AuthenticationFilter extends OncePerRequestFilter {
                 return ;
             }
             String token = request.getHeader(ConstantValue.TOKEN_HEADER);
-            if (StrUtil.isBlank(token)) {
+            if (StrUtil.isEmpty(token) || StrUtil.equals("null", token)) {
                 RespUtil.writeResult(request, response);
                 return ;
             }
@@ -72,7 +72,6 @@ public class AuthenticationFilter extends OncePerRequestFilter {
             return;
         }
         String uid = (String) jwt.getPayload("uid");
-
         Object cacheToken = redisUtils.get(uid);
         if (ObjectUtil.isEmpty(cacheToken)) {
             RespUtil.writeResultByToken(request, response, ResultCode.EXPIRE_TOKEN);
@@ -84,6 +83,8 @@ public class AuthenticationFilter extends OncePerRequestFilter {
         }
         // 如果认证通过，刷新redis缓存时间
         redisUtils.expire(uid, 3600, TimeUnit.SECONDS);
+        // 将uid放入request用于logout接口
+        request.setAttribute("uid", uid);
     }
 
 

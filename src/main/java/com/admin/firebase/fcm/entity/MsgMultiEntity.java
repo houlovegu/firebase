@@ -37,4 +37,7 @@ public class MsgMultiEntity implements Serializable {
 
     @ApiModelProperty(name = "tokens")
     private List<String> tokens;
+
+    @ApiModelProperty(name = "设备编号")
+    private List<String> uid;
 }

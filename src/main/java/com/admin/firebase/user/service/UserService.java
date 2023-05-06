@@ -7,6 +7,7 @@ import com.admin.firebase.user.entity.User;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 /**
@@ -21,4 +22,6 @@ public interface UserService extends IService<User> {
     Result register(User user);
 
     Result reset(ResetRequest reset, HttpSession session);
+
+    Result logout(HttpServletRequest request);
 }

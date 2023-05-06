@@ -15,4 +15,6 @@ public interface DeviceEntityService extends IService<DeviceEntity> {
     Result report(DeviceEntity device);
 
     Result deviceList(DeviceListRequest request);
+
+    Result deviceUidList();
 }

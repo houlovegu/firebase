@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 /**
@@ -93,6 +94,16 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
 //        String pwd = getPwd(reset.getPassword());
         user.setPassword(reset.getPassword());
         this.updateById(user);
+        return Result.ok();
+    }
+
+    @Override
+    public Result logout(HttpServletRequest request) {
+        String uid = request.getAttribute("uid").toString();
+        boolean b = redisUtils.hasKey(uid);
+        if (b) {
+            redisUtils.del(uid);
+        }
         return Result.ok();
     }
 

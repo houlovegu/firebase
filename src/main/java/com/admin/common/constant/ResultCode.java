@@ -20,11 +20,18 @@ public enum ResultCode {
     EXPIRE_TOKEN(4002, "token已过期"),
 
     VALIDATE_TOKEN(4003, "无效的token"),
+
     NOT_FOUND_USER(4004, "用户不存在"),
+
     PASSWORD_VERIFY_USER(4005, "密码错误"),
+
     FAIL_TO_REGISTER_USER(4006, "用户注册失败"),
+
     VALIDATE_FAIL_CODE(4007, "验证码失效"),
-    CHECK_FAIL_CODE(4008, "验证码错误")
+
+    CHECK_FAIL_CODE(4008, "验证码错误"),
+
+    DEVICE_TOKEN_FOUND_FAIL(4008, "未找到设备绑定的token"),
     ;
 
 

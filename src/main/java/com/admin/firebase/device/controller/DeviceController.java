@@ -33,4 +33,10 @@ public class DeviceController {
     public Result deviceList(@RequestBody DeviceListRequest request) {
         return deviceEntityService.deviceList(request);
     }
+
+    @ApiOperation("设备UID列表")
+    @PostMapping("/uid/list")
+    public Result deviceUidList() {
+        return deviceEntityService.deviceUidList();
+    }
 }

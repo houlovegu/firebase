@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.io.Serializable;
+import java.util.List;
 import java.util.Map;
 
 @Data
@@ -40,4 +41,7 @@ public class MsgSingleEntity implements Serializable {
 
     @ApiModelProperty(name = "fcmOptions")
     private FcmOptionsEntity fcmOptions;
+
+    @ApiModelProperty(name = "设备编号")
+    private List<String> uid;
 }

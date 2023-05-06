@@ -37,7 +37,7 @@ spring:
         # 连接池中最大连接数，负数表示没有限制
         max-active: 20
 mybatis-plus:
-  mapper-locations: com/admin/*/mapper/mapping/*Mapper.xml
+  mapper-locations: classpath:com/admin/firebase/*/mapper/mapping/*Mapper.xml
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
     map-underscore-to-camel-case: true

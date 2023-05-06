@@ -7,12 +7,10 @@ import com.admin.firebase.user.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 @Api(tags = "用户模块")
@@ -39,5 +37,11 @@ public class UserController {
     @PostMapping("/reset")
     public Result reset(@Validated @RequestBody ResetRequest reset, HttpSession session) {
         return userService.reset(reset, session);
+    }
+
+    @ApiOperation("退出登录接口")
+    @GetMapping("/logout")
+    public Result logout(HttpServletRequest request) {
+        return userService.logout(request);
     }
 }

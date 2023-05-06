@@ -1,19 +1,28 @@
 package com.admin.firebase.fcm.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
+import com.admin.common.constant.ResultCode;
 import com.admin.common.response.Result;
 import com.admin.config.FireBaseConfig;
+import com.admin.firebase.device.entity.DeviceEntity;
+import com.admin.firebase.device.service.DeviceEntityService;
 import com.admin.firebase.fcm.entity.MsgMultiEntity;
 import com.admin.firebase.fcm.entity.MsgSingleEntity;
 import com.admin.firebase.fcm.service.FCMService;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.google.firebase.messaging.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -21,10 +30,17 @@ import java.util.List;
 @Service
 public class FCMServiceImpl implements FCMService {
 
+    @Resource
+    private DeviceEntityService deviceEntityService;
     private final FirebaseMessaging firebaseMessaging = FireBaseConfig.FIREBASEMESSAGING;
 
     @Override
     public Result sendMsg(MsgSingleEntity message) {
+        String token = getToken(message.getUid().get(0));
+        if (ObjectUtil.isEmpty(token)) {
+            return Result.fail(ResultCode.DEVICE_TOKEN_FOUND_FAIL.getCode(),ResultCode.DEVICE_TOKEN_FOUND_FAIL.getMsg());
+        }
+        message.setToken(token);
         Message build = getMessage(message);
         String send;
         try {
@@ -36,11 +52,17 @@ public class FCMServiceImpl implements FCMService {
         return Result.ok(send);
     }
 
+
+
     @Override
     public Result batchSendMsg(MsgMultiEntity message) {
-        List<String> tokens = message.getTokens();
         BatchResponse batchResponse = null;
         List<String> failedTokens = new ArrayList<>();
+        List<String> uidTokens = getTokens(message.getUid());
+        if (CollUtil.isEmpty(uidTokens)) {
+            return Result.fail(ResultCode.DEVICE_TOKEN_FOUND_FAIL.getCode(),ResultCode.DEVICE_TOKEN_FOUND_FAIL.getMsg());
+        }
+        message.setTokens(uidTokens);
         MulticastMessage multicastMessage = getMultiMessage(message);
         try {
             batchResponse = firebaseMessaging.sendMulticast(multicastMessage);
@@ -49,7 +71,7 @@ public class FCMServiceImpl implements FCMService {
                 List<SendResponse> responses = batchResponse.getResponses();
                 for (int i = 0; i < responses.size(); i++) {
                     if (!responses.get(i).isSuccessful()) {
-                        failedTokens.add(tokens.get(i));
+                        failedTokens.add(uidTokens.get(i));
                     }
                 }
                 log.info("List of tokens that caused failures:", failedTokens);
@@ -60,6 +82,7 @@ public class FCMServiceImpl implements FCMService {
         }
         return Result.ok(failedTokens);
     }
+
 
     @Override
     public Result batchSendMsgList(List<MsgSingleEntity> messages) {
@@ -76,6 +99,25 @@ public class FCMServiceImpl implements FCMService {
             throw new RuntimeException(e);
         }
         return Result.ok();
+    }
+
+    private String getToken(String uid) {
+        LambdaQueryWrapper<DeviceEntity> wrapper = Wrappers.lambdaQuery();
+        DeviceEntity device = deviceEntityService.getOne(wrapper.eq(DeviceEntity::getUid, uid));
+        if (ObjectUtil.isEmpty(device)) {
+            return null;
+        }
+        return device.getRegistryToken();
+    }
+
+    private List<String> getTokens(List<String> uid) {
+        LambdaQueryWrapper<DeviceEntity> wrapper = Wrappers.lambdaQuery();
+        List<DeviceEntity> list = deviceEntityService.list(wrapper.in(DeviceEntity::getUid, uid));
+        List<String> tokens = Collections.synchronizedList(new ArrayList<>());
+        list.parallelStream().forEach(deviceEntity -> {
+            tokens.add(deviceEntity.getRegistryToken());
+        });
+        return tokens;
     }
 
     private static MulticastMessage getMultiMessage(MsgMultiEntity message) {

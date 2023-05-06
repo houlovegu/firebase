@@ -1,16 +1,20 @@
 package com.admin.firebase.device.service.impl;
 
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
 import com.admin.common.response.Result;
 import com.admin.firebase.device.entity.DeviceEntity;
 import com.admin.firebase.device.entity.DeviceListRequest;
 import com.admin.firebase.device.mapper.DeviceEntityMapper;
 import com.admin.firebase.device.service.DeviceEntityService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
 * @author sky
@@ -39,13 +43,25 @@ public class DeviceEntityServiceImpl extends ServiceImpl<DeviceEntityMapper, Dev
 
     @Override
     public Result deviceList(DeviceListRequest request) {
+        String deviceNo = request.getDeviceNo();
+        LambdaQueryWrapper<DeviceEntity> wrapper = Wrappers.lambdaQuery();
+        if (StrUtil.isNotBlank(deviceNo)) {
+            wrapper.like(DeviceEntity::getUid, deviceNo);
+        }
         Long pageNo = request.getPageNo();
         Long pageSize = request.getPageSize();
         pageNo = ObjectUtil.isEmpty(pageNo)? 1l:pageNo;
         pageSize = ObjectUtil.isEmpty(pageSize)? 15l:pageSize;
         Page<DeviceEntity> page = new Page(pageNo, pageSize);
-        Page<DeviceEntity> result = this.page(page);
+        Page<DeviceEntity> result = this.page(page, wrapper);
         return Result.ok(result);
+    }
+
+    @Override
+    public Result deviceUidList() {
+        QueryWrapper<DeviceEntity> queryWrapper = Wrappers.query();
+        queryWrapper.select("uid");
+        return Result.ok(this.list(queryWrapper));
     }
 }
 
