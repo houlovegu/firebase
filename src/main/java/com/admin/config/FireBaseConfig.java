@@ -20,7 +20,7 @@ public class FireBaseConfig {
     static {
 
         try {
-            InputStream serviceAccount = new ByteArrayInputStream(getFirebaseJson().getBytes(StandardCharsets.UTF_8));
+            InputStream serviceAccount = new ByteArrayInputStream(getFirebaseJson());
             GoogleCredentials googleCredentials = null;
 
                 googleCredentials = GoogleCredentials.fromStream(serviceAccount);
@@ -36,7 +36,7 @@ public class FireBaseConfig {
         }
     }
 
-    private static String getFirebaseJson() {
+    private static byte[] getFirebaseJson() {
         try {
             Resource resource = new DefaultResourceLoader().getResource("classpath:crets/" + AUTH_FILENAME);
             BufferedInputStream  bis = new BufferedInputStream (resource.getInputStream());
@@ -48,7 +48,7 @@ public class FireBaseConfig {
             if (bis != null) {
                 bis.close();
             }
-            return new String(buffer, StandardCharsets.UTF_8);
+            return buffer;
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
