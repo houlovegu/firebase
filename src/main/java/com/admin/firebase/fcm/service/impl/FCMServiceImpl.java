@@ -14,7 +14,6 @@ import com.admin.firebase.fcm.entity.MsgMultiEntity;
 import com.admin.firebase.fcm.entity.MsgSingleEntity;
 import com.admin.firebase.fcm.service.FCMService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.google.firebase.messaging.*;
 import lombok.extern.slf4j.Slf4j;

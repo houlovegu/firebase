@@ -1,9 +1,12 @@
 package com.admin.config;
 
+import cn.hutool.core.io.FileUtil;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.messaging.FirebaseMessaging;
+import org.springframework.core.io.DefaultResourceLoader;
+import org.springframework.core.io.Resource;
 import org.springframework.util.ResourceUtils;
 
 import java.io.*;
@@ -34,25 +37,20 @@ public class FireBaseConfig {
     }
 
     private static String getFirebaseJson() {
-        File file;
-        BufferedReader br = null;
         try {
-            file = ResourceUtils.getFile("classpath:crets/" + AUTH_FILENAME);
-            br = new BufferedReader(new FileReader(file));
-            String string = null;
-            StringBuffer sb = new StringBuffer();
-            while((string = br.readLine()) != null){
-                sb.append(string);
+            Resource resource = new DefaultResourceLoader().getResource("classpath:crets/" + AUTH_FILENAME);
+            BufferedInputStream  bis = new BufferedInputStream (resource.getInputStream());
+            byte[] buffer = new byte[4096];
+            int i = bis.read(buffer);
+            while (i != -1) {
+                i = bis.read(buffer);
             }
-            return sb.toString();
+            if (bis != null) {
+                bis.close();
+            }
+            return new String(buffer, StandardCharsets.UTF_8);
         } catch (Exception e) {
             throw new RuntimeException(e);
-        }finally {
-            try {
-                br.close();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
         }
 
     }
