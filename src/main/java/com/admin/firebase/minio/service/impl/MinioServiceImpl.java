@@ -29,7 +29,10 @@ public class MinioServiceImpl implements MinioService {
 
     @Override
     public Result upload(MultipartFile file, String bucketName) {
-        return Result.ok(address + "/"  + minioUtils.upload(file, bucketName));
+        String upload = minioUtils.upload(file, bucketName);
+        String minioFileName = upload.split("/")[1];
+        String fileUrl = minioUtils.getFileUrl(null , minioFileName);
+        return Result.ok(fileUrl);
     }
 
     @Override

@@ -23,7 +23,7 @@ public class MinioController {
 
     @ApiOperation("文件上传")
     @PostMapping("/upload")
-    public Result upload(@RequestPart(value = "file") MultipartFile file, @RequestParam("bucketName") String bucketName) {
+    public Result upload(@RequestPart(value = "file") MultipartFile file, @RequestParam(name = "bucketName", required = false) String bucketName) {
         return minioService.upload(file, bucketName);
     }
 

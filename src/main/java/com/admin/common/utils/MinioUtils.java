@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @Component
@@ -222,6 +223,8 @@ public class MinioUtils {
                 bucketName = this.bucketName;
             }
             GetPresignedObjectUrlArgs args = GetPresignedObjectUrlArgs.builder()
+                    // 默认七天内有效
+                    .expiry(7, TimeUnit.DAYS)
                     .bucket(bucketName)
                     .object(objectFile)
                     .method(Method.GET).build();
