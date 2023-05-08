@@ -55,7 +55,27 @@ public class AuthenticationFilter extends OncePerRequestFilter {
                 return ;
             }
             // 验证token
-            validateToken(token, request, response);
+//            validateToken(token, request, response);
+            JWT jwt = JWT.of(token);
+            boolean verify = jwt.setKey(JWT_KEY.getBytes()).verify();
+            if (!verify) {
+                RespUtil.writeResultByToken(request, response, ResultCode.VALIDATE_FAIL_TOKEN);
+                return;
+            }
+            String uid = (String) jwt.getPayload("uid");
+            Object cacheToken = redisUtils.get(uid);
+            if (ObjectUtil.isEmpty(cacheToken)) {
+                RespUtil.writeResultByToken(request, response, ResultCode.EXPIRE_TOKEN);
+                return;
+            }
+            if (!StrUtil.equals((String) cacheToken, token)) {
+                RespUtil.writeResultByToken(request, response, ResultCode.VALIDATE_TOKEN);
+                return;
+            }
+            // 如果认证通过，刷新redis缓存时间
+            redisUtils.expire(uid, 3600, TimeUnit.SECONDS);
+            // 将uid放入request用于logout接口
+            request.setAttribute("uid", uid);
             filterChain.doFilter(request, response);
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -65,26 +85,7 @@ public class AuthenticationFilter extends OncePerRequestFilter {
     }
 
     private void validateToken(String token, HttpServletRequest request, HttpServletResponse response) {
-        JWT jwt = JWT.of(token);
-        boolean verify = jwt.setKey(JWT_KEY.getBytes()).verify();
-        if (!verify) {
-            RespUtil.writeResultByToken(request, response, ResultCode.VALIDATE_FAIL_TOKEN);
-            return;
-        }
-        String uid = (String) jwt.getPayload("uid");
-        Object cacheToken = redisUtils.get(uid);
-        if (ObjectUtil.isEmpty(cacheToken)) {
-            RespUtil.writeResultByToken(request, response, ResultCode.EXPIRE_TOKEN);
-            return;
-        }
-        if (!StrUtil.equals((String) cacheToken, token)) {
-            RespUtil.writeResultByToken(request, response, ResultCode.VALIDATE_TOKEN);
-            return;
-        }
-        // 如果认证通过，刷新redis缓存时间
-        redisUtils.expire(uid, 3600, TimeUnit.SECONDS);
-        // 将uid放入request用于logout接口
-        request.setAttribute("uid", uid);
+
     }
 
 
