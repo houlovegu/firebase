@@ -12,9 +12,30 @@ import com.baomidou.mybatisplus.extension.service.IService;
 */
 public interface DeviceEntityService extends IService<DeviceEntity> {
 
+    /**
+     * @Author sky
+     * @Description 设备上报
+     * @Date 2023/5/9 8:57
+     * @Param [device]
+     * @return com.admin.common.response.Result
+     **/
     Result report(DeviceEntity device);
 
+    /**
+     * @Author sky
+     * @Description 获取设备列表
+     * @Date 2023/5/9 8:57
+     * @Param [request]
+     * @return com.admin.common.response.Result
+     **/
     Result deviceList(DeviceListRequest request);
 
+    /**
+     * @Author sky
+     * @Description 获取设备uid列表
+     * @Date 2023/5/9 8:58
+     * @Param []
+     * @return com.admin.common.response.Result
+     **/
     Result deviceUidList();
 }

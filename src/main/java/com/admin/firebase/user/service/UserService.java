@@ -17,11 +17,39 @@ import javax.servlet.http.HttpSession;
  */
 public interface UserService extends IService<User> {
 
+    /**
+     * @Author sky
+     * @Description 登录
+     * @Date 2023/5/9 9:00
+     * @Param [user]
+     * @return com.admin.common.response.Result
+     **/
     Result login(User user);
 
+    /**
+     * @Author sky
+     * @Description 注册
+     * @Date 2023/5/9 9:01
+     * @Param [user]
+     * @return com.admin.common.response.Result
+     **/
     Result register(User user);
 
+    /**
+     * @Author sky
+     * @Description 重置密码
+     * @Date 2023/5/9 9:01
+     * @Param [reset, session]
+     * @return com.admin.common.response.Result
+     **/
     Result reset(ResetRequest reset, HttpSession session);
 
+    /**
+     * @Author sky
+     * @Description 退出登录
+     * @Date 2023/5/9 9:01
+     * @Param [request]
+     * @return com.admin.common.response.Result
+     **/
     Result logout(HttpServletRequest request);
 }
