@@ -18,6 +18,20 @@ spring:
     url: jdbc:mysql://localhost:3306/test_db?serverTimezone=UTC&useSSL=false&useUnicode=true&characterEncoding=UTF8
     username: root
     password: root
+    hikari:
+      # 等待连接池分配连接的最大时长（毫秒），超过这个时长还没可用的连接则发生SQLException， 默认:30秒
+      connection-timeout: 30000
+      # 最小连接数
+      minimum-idle: 5
+      # 最大连接数
+      maximum-pool-size: 15
+      # 自动提交
+      auto-commit: true
+      # 一个连接idle状态的最大时长（毫秒），超时则被释放（retired），默认:10分钟
+      idle-timeout: 600000
+      pool-name: FireBaseHikariCP
+      # 一个连接的生命时长（毫秒），超时而且没被使用则被释放（retired），默认:30分钟 1800000ms，建议设置比数据库超时时长少60秒，参考MySQL wait_timeout参数（show variables like '%timeout%';） -->
+      max-lifetime: 28740000
 
   redis:
     # Redis服务器地址

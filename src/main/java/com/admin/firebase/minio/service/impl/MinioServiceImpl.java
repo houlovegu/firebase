@@ -75,12 +75,6 @@ public class MinioServiceImpl implements MinioService {
             response.setContentType("application/force-download");
             response.setCharacterEncoding("UTF-8");
             IOUtils.copy(fileInputStream, response.getOutputStream());
-//            byte[] bytes = minioUtils.download(filePath);
-//            ServletOutputStream outputStream = response.getOutputStream();
-//            response.setHeader("Content-Disposition", "attachment;filename=" + filePath);
-//            response.setHeader("Content-Type", "application/octet-stream");
-//            response.setContentType("application/octet-stream; charset=UTF-8");
-//            outputStream.write(bytes);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

@@ -17,6 +17,8 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.google.firebase.messaging.*;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -24,10 +26,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-
-@Slf4j
 @Service
 public class FCMServiceImpl implements FCMService {
+
+    private Logger log = LoggerFactory.getLogger(this.getClass());
 
     @Resource
     private DeviceEntityService deviceEntityService;
