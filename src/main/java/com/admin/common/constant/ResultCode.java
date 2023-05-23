@@ -36,6 +36,12 @@ public enum ResultCode {
     THIRD_CLIENT_EXIST(4010, "客户端已存在"),
 
     AUTHORIZATION_CODE_REDIRECT_URI_NOT_NULL(4011, "授权码模式认证时,重定向URI不能为空"),
+
+    OAUTH_STATE_ERROR(4012,"state 无效"),
+
+    OAUTH_CLIENT_ERROR(4013,"未查询到client信息,请确认参数"),
+
+    OAUTH_SCOPE_ERROR(4014,"未找到相应的scope权限"),
     ;
 
 

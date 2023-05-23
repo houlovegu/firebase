@@ -22,6 +22,24 @@ public class TokenStore {
     private final String OAUTH_ACCESS_TOKEN = "access_token:";
     private final String OAUTH_REFRESH_TOKEN = "refresh_token:";
 
+    private final String OAUTH_STATE_PREFIX = "oauth_state:";
+
+    public void storeOauthState(String stateId) {
+        redisUtils.set(OAUTH_STATE_PREFIX + stateId, stateId);
+    }
+
+    public String getOauthState(String stateId) {
+        String state = get(OAUTH_STATE_PREFIX + stateId, String.class);
+        if (state == null) {
+            return null;
+        }
+        return state;
+    }
+
+    public void delOauthState(String stateId) {
+        redisUtils.del(OAUTH_STATE_PREFIX + stateId);
+    }
+
     public void storeAccessToken(AuthToken authToken) {
         String accessToken = authToken.getAccessToken();
         int expireIn = authToken.getExpireIn();

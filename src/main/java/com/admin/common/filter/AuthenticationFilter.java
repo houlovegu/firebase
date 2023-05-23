@@ -38,7 +38,7 @@ public class AuthenticationFilter extends OncePerRequestFilter {
         try {
             String requestURI = request.getRequestURI();
             // 放行swagger
-            if (StrUtil.containsAny(requestURI, "/callback","/oauth/login","/favicon.ico","/user/reset","/user/register","/user/login","/auth/getCaptcha","/auth/token","/doc.html","webjars","swagger-resources","/v2/api-docs")) {
+            if (StrUtil.containsAny(requestURI, "/oauth/authorize","/callback","/oauth/login","/favicon.ico","/user/reset","/user/register","/user/login","/auth/getCaptcha","/auth/token","/doc.html","webjars","swagger-resources","/v2/api-docs")) {
                 filterChain.doFilter(request, response);
                 return ;
             }

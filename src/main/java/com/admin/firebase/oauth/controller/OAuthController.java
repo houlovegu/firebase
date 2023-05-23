@@ -4,6 +4,7 @@ import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.admin.common.response.Result;
 import com.admin.firebase.oauth.constant.TokenStore;
+import com.admin.firebase.oauth.service.OAuthService;
 import com.admin.firebase.user.entity.Socialuser;
 import com.admin.firebase.user.entity.User;
 import com.admin.firebase.user.service.SocialuserService;
@@ -19,10 +20,7 @@ import me.zhyd.oauth.utils.AuthStateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -57,6 +55,9 @@ public class OAuthController {
 
     @Resource
     private TokenStore tokenStore;
+
+    @Resource
+    private OAuthService oAuthService;
 
     @GetMapping
     public List<String> list() {
@@ -103,6 +104,15 @@ public class OAuthController {
         } else {
             log.info("【{}】login is fail...", type);
         }
+    }
+
+    @GetMapping("/authorize")
+    public void auth(@RequestParam("client_id") String clientID,
+                             @RequestParam("state") String state,
+                             @RequestParam("redirect_uri") String redirectUri,
+                             @RequestParam("scope") String scope,
+                             HttpServletResponse response) throws IOException {
+        oAuthService.auth(clientID, state, redirectUri, scope, response);
     }
 
 }
