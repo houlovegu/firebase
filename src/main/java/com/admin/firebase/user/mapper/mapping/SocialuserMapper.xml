@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.admin.firebase.user.mapper.SocialuserMapper">
+
+    <resultMap id="BaseResultMap" type="com.admin.firebase.user.entity.Socialuser">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="accesscode" column="accessCode" jdbcType="VARCHAR"/>
+            <result property="accesstoken" column="accessToken" jdbcType="VARCHAR"/>
+            <result property="code" column="code" jdbcType="VARCHAR"/>
+            <result property="expirein" column="expireIn" jdbcType="INTEGER"/>
+            <result property="idtoken" column="idToken" jdbcType="VARCHAR"/>
+            <result property="macalgorithm" column="macAlgorithm" jdbcType="VARCHAR"/>
+            <result property="mackey" column="macKey" jdbcType="VARCHAR"/>
+            <result property="oauthtoken" column="oauthToken" jdbcType="VARCHAR"/>
+            <result property="oauthtokensecret" column="oauthTokenSecret" jdbcType="VARCHAR"/>
+            <result property="openid" column="openId" jdbcType="VARCHAR"/>
+            <result property="refreshtoken" column="refreshToken" jdbcType="VARCHAR"/>
+            <result property="scope" column="scope" jdbcType="VARCHAR"/>
+            <result property="source" column="source" jdbcType="VARCHAR"/>
+            <result property="tokentype" column="tokenType" jdbcType="VARCHAR"/>
+            <result property="uid" column="uId" jdbcType="VARCHAR"/>
+            <result property="unionid" column="unionId" jdbcType="VARCHAR"/>
+            <result property="uuid" column="uuid" jdbcType="VARCHAR"/>
+            <result property="nickname" column="nickname" jdbcType="VARCHAR"/>
+            <result property="username" column="username" jdbcType="VARCHAR"/>
+            <result property="avatar" column="avatar" jdbcType="VARCHAR"/>
+            <result property="createUser" column="create_user" jdbcType="BIGINT"/>
+            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+            <result property="updateUser" column="update_user" jdbcType="BIGINT"/>
+            <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,accessCode,accessToken,
+        code,expireIn,idToken,
+        macAlgorithm,macKey,oauthToken,
+        oauthTokenSecret,openId,refreshToken,
+        scope,source,tokenType,
+        uId,unionId,uuid,
+        nickname,username,avatar,
+        create_user,create_time,update_user,
+        update_time
+    </sql>
+</mapper>

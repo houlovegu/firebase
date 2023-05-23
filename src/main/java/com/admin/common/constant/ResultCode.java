@@ -31,7 +31,11 @@ public enum ResultCode {
 
     CHECK_FAIL_CODE(4008, "验证码错误"),
 
-    DEVICE_TOKEN_FOUND_FAIL(4008, "未找到设备绑定的token"),
+    DEVICE_TOKEN_FOUND_FAIL(4009, "未找到设备绑定的token"),
+
+    THIRD_CLIENT_EXIST(4010, "客户端已存在"),
+
+    AUTHORIZATION_CODE_REDIRECT_URI_NOT_NULL(4011, "授权码模式认证时,重定向URI不能为空"),
     ;
 
 

@@ -2,6 +2,7 @@ package com.admin.firebase.user.controller;
 
 import com.admin.common.response.Result;
 import com.admin.firebase.user.entity.ResetRequest;
+import com.admin.firebase.user.entity.TokenRequest;
 import com.admin.firebase.user.entity.User;
 import com.admin.firebase.user.service.UserService;
 import io.swagger.annotations.Api;
@@ -11,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 @Api(tags = "用户模块")
 @RestController
@@ -35,13 +35,19 @@ public class UserController {
 
     @ApiOperation("密码重置")
     @PostMapping("/reset")
-    public Result reset(@Validated @RequestBody ResetRequest reset, HttpSession session) {
-        return userService.reset(reset, session);
+    public Result reset(@Validated @RequestBody ResetRequest reset) {
+        return userService.reset(reset);
     }
 
     @ApiOperation("退出登录接口")
     @GetMapping("/logout")
     public Result logout(HttpServletRequest request) {
         return userService.logout(request);
+    }
+
+    @ApiOperation("退出登录接口")
+    @PostMapping("/loginByToken")
+    public Result loginByToken(@RequestBody TokenRequest tokenRequest) {
+        return userService.loginByToken(tokenRequest);
     }
 }

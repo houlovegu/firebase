@@ -24,7 +24,11 @@ public class ResetRequest implements Serializable {
     @ApiModelProperty("密码")
     private String password;
 
-    @NotEmpty(message = "验证码不能为空")
-    @ApiModelProperty("验证码")
+    @NotEmpty(message = "uuid")
+    @ApiModelProperty("uuid")
+    private String uuid;
+
+    @NotEmpty(message = "code")
+    @ApiModelProperty("code")
     private String code;
 }

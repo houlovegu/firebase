@@ -5,17 +5,45 @@
 <mapper namespace="com.admin.firebase.user.mapper.UserMapper">
 
     <resultMap id="BaseResultMap" type="com.admin.firebase.user.entity.User">
-            <id property="id" column="id" jdbcType="BIGINT"/>
-            <result property="email" column="email" jdbcType="VARCHAR"/>
-            <result property="password" column="password" jdbcType="VARCHAR"/>
-            <result property="createUser" column="create_user" jdbcType="BIGINT"/>
-            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
-            <result property="updateUser" column="update_user" jdbcType="BIGINT"/>
-            <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+        <id property="id" column="id" jdbcType="BIGINT"/>
+        <result property="addrarea" column="addrarea" jdbcType="VARCHAR"/>
+        <result property="addrcity" column="addrcity" jdbcType="VARCHAR"/>
+        <result property="addrprovince" column="addrprovince" jdbcType="VARCHAR"/>
+        <result property="birthday" column="birthday" jdbcType="VARCHAR"/>
+        <result property="industry" column="industry" jdbcType="VARCHAR"/>
+        <result property="intro" column="intro" jdbcType="VARCHAR"/>
+        <result property="password" column="password" jdbcType="VARCHAR"/>
+        <result property="position" column="position" jdbcType="VARCHAR"/>
+        <result property="salt" column="salt" jdbcType="VARCHAR"/>
+        <result property="sex" column="sex" jdbcType="VARCHAR"/>
+        <result property="telephone" column="telephone" jdbcType="VARCHAR"/>
+        <result property="username" column="username" jdbcType="VARCHAR"/>
+        <result property="email" column="email" jdbcType="VARCHAR"/>
+        <result property="imageurl" column="imageurl" jdbcType="VARCHAR"/>
+        <result property="registertime" column="registertime" jdbcType="VARCHAR"/>
+        <result property="lastlogintime" column="lastlogintime" jdbcType="VARCHAR"/>
+        <result property="editortype" column="editortype" jdbcType="INTEGER"/>
+        <result property="userstateid" column="userStateId" jdbcType="INTEGER"/>
+        <result property="available" column="available" jdbcType="INTEGER"/>
+        <result property="modifytime" column="modifyTime" jdbcType="VARCHAR"/>
+        <result property="modifyuserid" column="modifyUserId" jdbcType="BIGINT"/>
+        <result property="openid" column="openId" jdbcType="VARCHAR"/>
+        <result property="realname" column="realname" jdbcType="VARCHAR"/>
+        <result property="createUser" column="create_user" jdbcType="BIGINT"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateUser" column="update_user" jdbcType="BIGINT"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
     </resultMap>
 
     <sql id="Base_Column_List">
-        id,email,password,
+        id,addrarea,addrcity,
+        addrprovince,birthday,industry,
+        intro,password,position,
+        salt,sex,telephone,
+        username,email,imageurl,
+        registertime,lastlogintime,editortype,
+        userStateId,available,modifyTime,
+        modifyUserId,openId,realname,
         create_user,create_time,update_user,
         update_time
     </sql>

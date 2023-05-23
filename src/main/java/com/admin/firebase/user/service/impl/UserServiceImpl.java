@@ -8,20 +8,25 @@ import cn.hutool.crypto.SecureUtil;
 import cn.hutool.crypto.digest.MD5;
 import cn.hutool.jwt.JWT;
 import com.admin.common.constant.ResultCode;
+import com.admin.common.exception.CustomException;
 import com.admin.common.response.Result;
-import com.admin.common.utils.RedisUtils;
+import com.admin.constants.CacheConstants;
+import com.admin.firebase.oauth.constant.TokenStore;
 import com.admin.firebase.user.entity.ResetRequest;
+import com.admin.firebase.user.entity.Socialuser;
+import com.admin.firebase.user.entity.TokenRequest;
 import com.admin.firebase.user.entity.User;
 import com.admin.firebase.user.mapper.UserMapper;
+import com.admin.firebase.user.service.SocialuserService;
 import com.admin.firebase.user.service.UserService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 /**
  * @author sky
@@ -39,7 +44,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     private String JWT_KEY;
 
     @Resource
-    private RedisUtils redisUtils;
+    private TokenStore tokenStore;
+
+    @Resource
+    private SocialuserService socialuserService;
 
     @Override
     public Result login(User user) {
@@ -62,7 +70,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
                 .setExpiresAt(DateUtil.offsetHour(date,1))
                 .sign();
         // 默认1天有效
-        redisUtils.set(userId, token, 3600);
+//        redisUtils.set(userId, token, 3600);
         return Result.ok(token);
     }
 
@@ -80,11 +88,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     }
 
     @Override
-    public Result reset(ResetRequest reset, HttpSession session) {
-        String verifyCode = (String) session.getAttribute("verifyCode");
-        if (!StrUtil.equals(reset.getCode(), verifyCode)) {
-            return Result.fail(ResultCode.CHECK_FAIL_CODE.getCode(), ResultCode.CHECK_FAIL_CODE.getMsg());
-        }
+    public Result reset(ResetRequest reset) {
+//        String verifyCode = (String) session.getAttribute("verifyCode");
+        String verifyKey = CacheConstants.CAPTCHA_CODE_KEY + reset.getUuid();
+//        String captcha = (String) redisUtils.get(verifyKey);
+//        redisUtils.del(verifyKey);
+//        if (!reset.getCode().equalsIgnoreCase(captcha)) {
+//            return Result.fail(ResultCode.VALIDATE_FAIL_CODE.getCode(), ResultCode.VALIDATE_FAIL_CODE.getMsg());
+//        }
         LambdaQueryWrapper<User> wrapper = Wrappers.lambdaQuery();
         wrapper.eq(User::getEmail, reset.getEmail());
         User user = this.getOne(wrapper);
@@ -99,12 +110,30 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
 
     @Override
     public Result logout(HttpServletRequest request) {
-        String uid = request.getAttribute("uid").toString();
-        boolean b = redisUtils.hasKey(uid);
-        if (b) {
-            redisUtils.del(uid);
-        }
+//        String uid = request.getAttribute("uid").toString();
+//        boolean b = redisUtils.hasKey(uid);
+//        if (b) {
+//            redisUtils.del(uid);
+//        }
         return Result.ok();
+    }
+
+    @Override
+    public Result loginByToken(TokenRequest tokenRequest) {
+        String tokenStoreByToken = tokenStore.getTokenStoreByToken(tokenRequest.getAccessToken());
+        if (StrUtil.isBlank(tokenStoreByToken)) {
+            throw new CustomException(ResultCode.VALIDATE_TOKEN);
+        }
+        Socialuser socialuser = socialuserService.getOne(new LambdaQueryWrapper<Socialuser>().eq(Socialuser::getAccesstoken, tokenRequest.getAccessToken()));
+        if (ObjectUtil.isEmpty(socialuser)) {
+            throw new CustomException(ResultCode.NOT_FOUND_USER);
+        }
+        User one = this.getOne(new LambdaQueryWrapper<User>().eq(User::getOpenid, socialuser.getUuid()));
+        if (ObjectUtil.isEmpty(one)) {
+            throw new CustomException(ResultCode.NOT_FOUND_USER);
+        }
+
+        return Result.ok(one);
     }
 
     private String getPwd(String password) {

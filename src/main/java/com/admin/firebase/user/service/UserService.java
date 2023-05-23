@@ -3,12 +3,11 @@ package com.admin.firebase.user.service;
 
 import com.admin.common.response.Result;
 import com.admin.firebase.user.entity.ResetRequest;
+import com.admin.firebase.user.entity.TokenRequest;
 import com.admin.firebase.user.entity.User;
 import com.baomidou.mybatisplus.extension.service.IService;
 
-
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 /**
  * @author sky
@@ -39,10 +38,10 @@ public interface UserService extends IService<User> {
      * @Author sky
      * @Description 重置密码
      * @Date 2023/5/9 9:01
-     * @Param [reset, session]
+     * @Param [reset]
      * @return com.admin.common.response.Result
      **/
-    Result reset(ResetRequest reset, HttpSession session);
+    Result reset(ResetRequest reset);
 
     /**
      * @Author sky
@@ -52,4 +51,13 @@ public interface UserService extends IService<User> {
      * @return com.admin.common.response.Result
      **/
     Result logout(HttpServletRequest request);
+
+    /**
+     * @Author sky
+     * @Description 查询用户信息
+     * @Date 2023/5/23 15:32
+     * @Param [tokenRequest]
+     * @return com.admin.common.response.Result
+     **/
+    Result loginByToken(TokenRequest tokenRequest);
 }

@@ -63,7 +63,7 @@ mybatis-plus:
     type-aliases-package: com.admin.*.*.entity
 
 server:
-  port: 8088
+  port: 8002
 
 jwt:
   key: skyworth.123
@@ -80,25 +80,20 @@ minio:
   secret-key: j38wpWJSqbTHlKP7W1kylZ1qTihkft5T
   bucket-name: firebase
 
-#fdfs:
-#  so-timeout: 5000 # 读取时间
-#  connect-timeout: 60000 # 连接超时时间
-#  thumb-image: # 生成缩略图
-#    height: 150 # 缩略图高度
-#    width: 150 # 缩略图宽度
-#  tracker-list: # tracker 服务器地址
-#    - 172.24.76.247:22122
-#  web-server-url: http://172.24.76.247:8888/ # storage 服务器上nginx的地址
-#  pool: # 可参考 ConnectionPoolConfig
-#    #从池中借出的对象的最大数目（配置为-1表示不限制）
-#    max-total: -1
-#    #获取连接时的最大等待毫秒数(默认配置为5秒)
-#    max-wait-millis: 5000
-#    #每个key最大连接数  key配置的是连接服务端的地址(IP+端口)连接情况，如果有连接不够用的情况可以调整以上参数
-#    max-total-per-key: 50
-#    #每个key对应的连接池最大空闲连接数
-#    max-idle-per-key: 10
-#    #每个key对应的连接池最小空闲连接数
-#    min-idle-per-key: 5
-#    #向调用者输出“连接”资源时，是否检测有效性
-#    test-on-borrow: true
+web:
+  redirect-url: http://localhost:3000/login
+
+justAuth:
+  enabled: true
+  cache:
+    type: redis
+  type:
+    AMAZON:
+      client-id: amzn1.application-oa2-client.5069407d05db4fd992adbb688f9f4316
+      client-secret: amzn1.oa2-cs.v1.5d77d791de04233b88408ee69ce63d11ba5dcfe1e0387a7acb826502331837aa
+      redirect-uri: http://localhost:8002/oauth/amazon/callback #项目中的回调地址
+    GOOGLE:
+      client-id: 273221647301-racglb8a3u2erd9jlsfilesdaj4f5gc4.apps.googleusercontent.com
+      client-secret: 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
+      redirect-uri: https://localhost:8443/login #项目中的回调地址
+

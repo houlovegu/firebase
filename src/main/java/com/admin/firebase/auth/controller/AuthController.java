@@ -1,15 +1,13 @@
 package com.admin.firebase.auth.controller;
 
 import cn.hutool.core.lang.Dict;
-import com.admin.firebase.auth.service.AuthService;
 import com.admin.common.response.Result;
+import com.admin.firebase.auth.service.AuthService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 @Api(tags = "权限认证")
 @RestController
@@ -27,7 +25,7 @@ public class AuthController {
 
     @ApiOperation("获取验证码")
     @GetMapping("/getCaptcha")
-    public void getCaptcha(HttpServletRequest request, HttpServletResponse response) {
-        authService.getCaptcha(request, response);
+    public Result getCaptcha() {
+        return authService.getCaptcha();
     }
 }
